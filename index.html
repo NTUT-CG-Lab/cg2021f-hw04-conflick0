@@ -155,9 +155,8 @@
         Ammo = AmmoLib;
 
         init();
-        animate();
         initGui2();
-
+        animate();
     });
 
     function init() {
@@ -371,8 +370,7 @@
         function onChangeLocal() {
             for (let i = 0; i < 37; i++) {
                 const key = textArray[i];
-                const value = controls[key];
-                stdLocal[i] = value;
+                stdLocal[i] = controls[key];
             }
         }
 
@@ -400,6 +398,10 @@
             updateCurrentIdx(1);
             loadModel();
         }
+
+        if (e.key === 'S' || e.key === 's') {
+            saveJSON()
+        }
     }
 
     function onWindowResize() {
@@ -408,7 +410,23 @@
         effect.setSize(window.innerWidth, window.innerHeight);
     }
 
-    //
+    function saveJSON() {
+        let data = {};
+        stdLocal.forEach(function (value, idx) {
+            data[idx] = value;
+        });
+
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], {
+            type: "json/plain"
+        }));
+        a.setAttribute("download", "data.json");
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+
     function animate() {
         requestAnimationFrame(animate);
         render();
